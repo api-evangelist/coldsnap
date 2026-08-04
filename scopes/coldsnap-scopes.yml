@@ -1,0 +1,49 @@
+generated: '2026-08-02'
+method: searched
+source: https://coldsnap.com/.well-known/openid-configuration
+docs: https://coldsnap.com/.well-known/oauth-authorization-server
+note: >-
+  Scopes were read from the live OpenID Connect / RFC 8414 discovery documents served
+  at the ColdSnap origin, not from an OpenAPI oauth2 securityScheme - ColdSnap publishes
+  no OpenAPI.
+schemes:
+- name: shopify-customer-accounts
+  issuer: https://shopify.com/authentication/97378959650
+  source: https://coldsnap.com/.well-known/openid-configuration
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://shopify.com/authentication/97378959650/oauth/authorize
+    tokenUrl: https://shopify.com/authentication/97378959650/oauth/token
+    code_challenge_methods: [S256]
+scopes:
+- scope: openid
+  description: Request an OpenID Connect id_token identifying the customer.
+  flows: [authorizationCode]
+  sources: ['https://coldsnap.com/.well-known/openid-configuration']
+- scope: email
+  description: Release the customer's email address and email_verified claim.
+  flows: [authorizationCode]
+  sources: ['https://coldsnap.com/.well-known/openid-configuration']
+- scope: customer-account-api:full
+  description: >-
+    Full access to the Shopify Customer Account API on behalf of the signed-in customer -
+    orders, addresses, profile and subscription state for this store.
+  flows: [authorizationCode]
+  sources: ['https://coldsnap.com/.well-known/openid-configuration']
+- scope: customer-account-mcp-api:full
+  description: >-
+    Full access to the customer-account MCP surface on behalf of the signed-in customer.
+    This is the authenticated agent scope; the anonymous storefront MCP server at
+    /api/mcp requires no scope at all.
+  flows: [authorizationCode]
+  sources: ['https://coldsnap.com/.well-known/openid-configuration']
+observed_in_the_wild:
+- scope_set: 'openid email customer-account-api'
+  where: >-
+    the authorize redirect emitted by https://coldsnap.com/customer_authentication/login
+  note: the storefront's own login flow requests the narrower customer-account scope,
+    not the :full variant advertised in discovery.
+x-evidence:
+  fetched: '2026-08-02'
+  url: https://coldsnap.com/.well-known/openid-configuration
+  http_status: 200

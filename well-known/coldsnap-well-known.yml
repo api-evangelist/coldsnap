@@ -1,0 +1,74 @@
+generated: '2026-08-02'
+method: searched
+host: https://coldsnap.com
+probed: '2026-08-02'
+documents:
+- path: /.well-known/openid-configuration
+  standard: OpenID Connect Discovery 1.0
+  status: 200
+  content_type: application/json
+  file: coldsnap-openid-configuration.json
+  note: Shopify customer-accounts issuer https://shopify.com/authentication/97378959650
+- path: /.well-known/oauth-authorization-server
+  standard: RFC 8414 OAuth 2.0 Authorization Server Metadata
+  status: 200
+  content_type: application/json
+  file: coldsnap-oauth-authorization-server.json
+- path: /.well-known/oauth-protected-resource
+  standard: RFC 9728 OAuth 2.0 Protected Resource Metadata
+  status: 200
+  content_type: application/json
+  file: coldsnap-oauth-protected-resource.json
+- path: /.well-known/ucp
+  standard: Universal Commerce Protocol merchant discovery profile
+  status: 200
+  content_type: application/json
+  file: coldsnap-ucp.json
+  note: advertises UCP versions 2026-04-08 and 2026-01-23, the dev.ucp.shopping service
+    over MCP and embedded transports, checkout / cart / fulfillment / discount / order
+    / catalog.search / catalog.lookup capabilities, and Google Pay, Shopify card and
+    Shop Pay payment handlers.
+- path: /.well-known/security.txt
+  standard: RFC 9116
+  status: 404
+- path: /.well-known/api-catalog
+  standard: RFC 9727
+  status: 404
+- path: /.well-known/ai-plugin.json
+  status: 404
+- path: /.well-known/agent-card.json
+  standard: A2A 1.0.0
+  status: 404
+- path: /.well-known/agent.json
+  standard: A2A pre-0.3 legacy
+  status: 404
+other_root_documents:
+- path: /llms.txt
+  status: 200
+  content_type: text/markdown
+  file: ../llms/coldsnap-llms.txt
+- path: /agents.md
+  status: 200
+  content_type: text/markdown
+  file: ../skills/coldsnap-agents.md
+  note: linked from robots.txt and from /sitemap_agentic_discovery.xml
+- path: /robots.txt
+  status: 200
+  content_type: text/plain
+  note: carries an explicit agent-instruction preamble - UCP discovery URL, UCP/MCP
+    endpoint, a "checkouts are for humans" no-autonomous-payment rule, and bots@shopify.com
+    as contact.
+- path: /sitemap.xml
+  status: 200
+- path: /sitemap_agentic_discovery.xml
+  status: 200
+  note: a dedicated agent-discovery sitemap whose only entry is /agents.md
+x-evidence:
+  fetched: '2026-08-02'
+  hosts_probed:
+  - coldsnap.com
+  subdomains_probed_no_dns:
+  - api.coldsnap.com
+  - developer.coldsnap.com
+  - docs.coldsnap.com
+  - status.coldsnap.com

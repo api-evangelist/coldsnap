@@ -1,0 +1,176 @@
+generated: '2026-08-02'
+method: derived
+source: mcp/coldsnap-mcp.yml + graphql/coldsnap-storefront.graphql
+note: 'ColdSnap publishes no OpenAPI, so this crosswalk binds each MCP tool to the
+  GraphQL root fields that back it rather than to REST operationIds. Every GraphQL
+  field named below was verified present in the live introspected schema
+  (graphql/coldsnap-storefront.graphql). Bindings are by name and semantics: the MCP
+  server does not publish its internal resolver map, so confidence is recorded honestly.'
+surfaces:
+  openapi:
+    present: false
+    note: no OpenAPI or Swagger description is published for any ColdSnap surface;
+      /openapi.json, /swagger.json, /api-docs and /docs on coldsnap.com all returned
+      404 or the Shopify HTML shell.
+  graphql:
+    endpoint: https://coldsnap.com/api/2026-07/graphql.json
+    introspection: open
+    gated: false
+    file: ../graphql/coldsnap-storefront.graphql
+    root_queries: 35
+    mutations: 41
+    types: 428
+  mcp:
+    url: https://coldsnap.com/api/mcp
+    gated: false
+    tools_list: open
+    tools: 5
+  ucp_mcp:
+    url: https://coldsnap.com/api/ucp/mcp
+    gated: true
+    reason: requires a UCP agent profile URI; tools/list returned 422 / -32001 invalid_profile_url
+  json_ajax:
+    base: https://coldsnap.com/
+    documented_in: https://coldsnap.com/agents.md
+    spec: none
+crosswalk:
+- tool: search_catalog
+  category: catalog
+  graphql:
+  - products
+  - search
+  - predictiveSearch
+  - collections
+  binding: graphql
+  confidence: high
+  note: paginated free-text and filtered product search; the GraphQL products/search
+    connections carry the same cursor pagination the tool exposes as pagination.cursor.
+- tool: get_product_details
+  category: catalog
+  graphql:
+  - product
+  - productByHandle
+  - node
+  binding: graphql
+  confidence: high
+  note: the tool's options parameter maps to variant selection on Product.variantBySelectedOptions
+    / Product.variants in the schema.
+- tool: get_cart
+  category: cart
+  graphql:
+  - cart
+  binding: graphql
+  confidence: high
+- tool: update_cart
+  category: cart
+  graphql:
+  - cartCreate
+  - cartLinesAdd
+  - cartLinesUpdate
+  - cartLinesRemove
+  - cartBuyerIdentityUpdate
+  - cartDeliveryAddressesAdd
+  - cartDeliveryAddressesReplace
+  - cartSelectedDeliveryOptionsUpdate
+  - cartDiscountCodesUpdate
+  - cartGiftCardCodesAdd
+  - cartNoteUpdate
+  binding: graphql
+  confidence: medium
+  note: a single consolidated composite tool that fans out across eleven distinct GraphQL
+    cart mutations; when cart_id is omitted and add_items is supplied it behaves as
+    cartCreate. The fan-out is inferred from the tool's own parameter names, not from
+    a published resolver map.
+- tool: search_shop_policies_and_faqs
+  category: content
+  graphql:
+  - shop
+  - page
+  - pages
+  binding: graphql
+  confidence: low
+  note: the tool answers natural-language questions over policies, FAQ pages and store
+    facts. GraphQL exposes Shop.privacyPolicy / termsOfService / refundPolicy / subscriptionPolicy
+    and the pages connection, but the tool is retrieval-backed rather than a direct
+    field projection, so this is a semantic mapping only.
+mcp_only: []
+graphql_only:
+- capability: customer accounts and access tokens
+  fields:
+  - customer
+  - customerCreate
+  - customerAccessTokenCreate
+  - customerAccessTokenCreateWithMultipass
+  - customerAccessTokenRenew
+  - customerAccessTokenDelete
+  - customerActivate
+  - customerActivateByUrl
+  - customerRecover
+  - customerReset
+  - customerResetByUrl
+  - customerUpdate
+  - customerAddressCreate
+  - customerAddressUpdate
+  - customerAddressDelete
+  - customerDefaultAddressUpdate
+  reason: no MCP tool exposes customer identity or address-book management; the anonymous
+    storefront MCP server is catalog and cart only.
+- capability: checkout completion
+  fields:
+  - cartPrepareForCompletion
+  - cartSubmitForCompletion
+  - cartCompletionAttempt
+  - shopPayPaymentRequestSessionCreate
+  - shopPayPaymentRequestSessionSubmit
+  reason: checkout completion is deliberately withheld from the anonymous MCP tool set.
+    agents.md and robots.txt both state that checkout and payment require contemporaneous
+    human approval and must route through the UCP endpoint or the Shop skill.
+- capability: content and editorial
+  fields:
+  - blog
+  - blogByHandle
+  - blogs
+  - article
+  - articles
+  - menu
+  - metaobject
+  - metaobjects
+  reason: the store's 78 blog articles, navigation menus and metaobjects are reachable
+    over GraphQL but have no MCP tool.
+- capability: storefront metadata
+  fields:
+  - localization
+  - locations
+  - paymentSettings
+  - productTags
+  - productTypes
+  - productRecommendations
+  - shopPayInstallmentsPricing
+  - sitemap
+  - urlRedirects
+  - publicApiVersions
+  reason: localization, store locations, payment settings, taxonomy and version negotiation
+    are GraphQL-only.
+- capability: cart metafields and personal data
+  fields:
+  - cartMetafieldsSet
+  - cartMetafieldDelete
+  - cartAttributesUpdate
+  - cartBillingAddressUpdate
+  - cartClone
+  - cartPaymentUpdate
+  - cartRemovePersonalData
+  - cartDeliveryAddressesRemove
+  - cartDeliveryAddressesUpdate
+  - cartGiftCardCodesRemove
+  - cartGiftCardCodesUpdate
+  reason: eleven cart mutations have no equivalent in the consolidated update_cart tool.
+rest_only: []
+coverage:
+  mcp_tools_named: 5
+  mcp_tools_bound: 5
+  mcp_only: 0
+  graphql_root_fields_total: 76
+  graphql_fields_reachable_via_a_tool: 19
+  graphql_only_capabilities: 5
+  rest_operations_total: 0

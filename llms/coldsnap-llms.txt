@@ -1,0 +1,126 @@
+# ColdSnap
+
+> Enjoy a Fresh Frozen Treat Under Two Minutes.
+
+This store is hosted at https://coldsnap.com and contains:
+- 11 product collections
+- 37 products
+- 2 blogs with 78 articles
+- 38 pages
+
+## Collections
+
+- [Premium Ice Cream](https://coldsnap.com/collections/premium-ice-cream)
+- [Machine](https://coldsnap.com/collections/machine)
+- [Merchandise](https://coldsnap.com/collections/merchandise)
+- [Boozy Frozen Treats](https://coldsnap.com/collections/non-dairy-frozen-desserts)
+- [Snappuccino® Frozen Lattes](https://coldsnap.com/collections/snappuccino®-frozen-lattes)
+- [Frozen Smoothies](https://coldsnap.com/collections/frozen-smoothies)
+- [Frozen Protein Shakes](https://coldsnap.com/collections/frozen-protein-shakes)
+- [Boozy Frozen Treats](https://coldsnap.com/collections/boozy-ice-cream)
+- [Accessories](https://coldsnap.com/collections/accessories)
+- [ColdSnap Pods](https://coldsnap.com/collections/coldsnap-pods)
+- [Non-Dairy](https://coldsnap.com/collections/non-dairy) - Frozen treats that are dairy free
+
+## Products
+
+- [Vanilla Ice Cream, 12-Pack](https://coldsnap.com/products/vanilla-ice-cream) - Pods, by ColdSnap
+- [Standard Merchandising Rack](https://coldsnap.com/products/standard-merchandising-rack) - Retail Displays, by ColdSnap
+- [Napkin/Utensil Holder](https://coldsnap.com/products/napkin-utensil-holder) - Napkins, by ColdSnap
+- [Instructional Placemat](https://coldsnap.com/products/instructional-placemat) - Retail Displays, by ColdSnap
+- [Enhanced Merchandising Rack (Large)](https://coldsnap.com/products/enhanced-merchandising-rack-large) - Retail Displays, by ColdSnap
+- [Enhanced Merchandising Rack (Small)](https://coldsnap.com/products/enhanced-merchandising-rack-small) - Retail Displays, by ColdSnap
+- [Bowls (Pack of 50)](https://coldsnap.com/products/bowls-pack-of-50) - Bowls, by ColdSnap
+- [Cups (Pack of 50)](https://coldsnap.com/products/cups-pack-of-50) - Cups, by ColdSnap
+- [Napkins (Pack of 80)](https://coldsnap.com/products/napkins-pack-of-80) - Napkins, by ColdSnap
+- [Spoons (Pack of 50)](https://coldsnap.com/products/spoons-pack-of-50) - Spoons, by ColdSnap
+- [ColdSnap Credit Card Reader](https://coldsnap.com/products/coldsnap-credit-card-reader) - Credit Card Reader, by ColdSnap
+- [Salted Caramel Ice Cream, 12-Pack](https://coldsnap.com/products/salted-caramel-ice-cream) - Pods, by ColdSnap
+- [Coffee Ice Cream, 12-Pack](https://coldsnap.com/products/coffee-ice-cream) - Pods, by ColdSnap
+- [Bourbon Boozy Ice Cream, 12-Pack](https://coldsnap.com/products/bourbon-boozy-ice-cream) - Pods, by ColdSnap
+- [Mexican Hot Chocolate Boozy Ice Cream, 12-Pack](https://coldsnap.com/products/mexican-hot-chocolate-boozy-ice-cream) - Pods, by ColdSnap
+- [Chocolate Oat Non-Dairy Frozen Dessert, 12-Pack](https://coldsnap.com/products/chocolate-oat-non-dairy-frozen-dessert) - Pods, by ColdSnap
+- [Passionate Mango Frozen Smoothie, 12-Pack](https://coldsnap.com/products/passionate-mango-frozen-smoothie) - Pods, by ColdSnap
+- [Vanilla Frozen Protein Shake, 12-Pack](https://coldsnap.com/products/vanilla-frozen-protein-shake) - Pods, by ColdSnap
+- [Chocolate (Non-Dairy) Frozen Protein Shake, 12-Pack](https://coldsnap.com/products/chocolate-non-dairy-frozen-protein-shake) - Pods, by ColdSnap
+- [ColdSnap Hat](https://coldsnap.com/products/snapback-hat) - Merchandise, by ColdSnap
+- [Pumpkin Spice Ice Cream](https://coldsnap.com/products/pumpkin-spice-ice-cream) - Pods, by ColdSnap
+- [ColdSnap Commercial Frozen Treat Machine](https://coldsnap.com/products/coldsnap-frozen-treat-machine) - Machine, by ColdSnap
+- [Overhead Sign](https://coldsnap.com/products/overhead-sign) - Retail Displays, by ColdSnap
+- [ColdSnap Trial Program](https://coldsnap.com/products/coldsnap-trial-program) - Machine, by ColdSnap
+- [ColdSnap Essentials](https://coldsnap.com/products/coldsnap-essentials) - Machine, by ColdSnap
+- [ColdSnap Complete](https://coldsnap.com/products/coldsnap-complete) - Machine, by ColdSnap
+- [ColdSnap Frozen Treat Machine (Refurbished)](https://coldsnap.com/products/coldsnap-frozen-treat-machine-refurbished) - Machine, by ColdSnap
+- [Chocolate Ice Cream, 12-Pack](https://coldsnap.com/products/chocolate-ice-cream) - Pods, by ColdSnap
+- [French Vanilla Snappuccino® Frozen Latte, 12-Pack](https://coldsnap.com/products/french-vanilla-snappuccino-frozen-latte) - Pods, by ColdSnap
+- [Mocha Snappuccino® Frozen Latte, 12-Pack](https://coldsnap.com/products/mocha-snappuccino-frozen-latte) - Pods, by ColdSnap
+- [ColdSnap Starter Bundle with Pods](https://coldsnap.com/products/coldsnap-starter-bundle) - Machine, by ColdSnap
+- [Customizable ColdSnap Bundle](https://coldsnap.com/products/customizable-coldsnap-bundle) - by ColdSnap
+- [PRE-ORDER Margarita Frozen Cocktail, 12-Pack - OLD](https://coldsnap.com/products/margarita-frozen-cocktail-12-pack) - Pods, by ColdSnap
+- [Margarita Frozen Cocktail, 12-Pack](https://coldsnap.com/products/pre-order-margarita-frozen-cocktail-12-pack-copy) - Pods, by ColdSnap
+- [Napkins (Pack of 50 Unbranded)](https://coldsnap.com/products/napkins-pack-of-50-unbranded) - Napkins, by ColdSnap
+- [[Test] Product Redirect](https://coldsnap.com/products/test-product-redirect) - by ColdSnap
+- [Bowls (Pack of 50 Unbranded)](https://coldsnap.com/products/bowls-pack-of-50unbranded) - Bowls, by ColdSnap
+
+
+## Blogs
+
+- [News](https://coldsnap.com/blogs/news) - 0 articles
+- [Blog](https://coldsnap.com/blogs/blog) - 78 articles
+  - [Customer Case Study: Bonfire Wellness](https://coldsnap.com/blogs/blog/a-refreshing-twist-on-wellness-at-bonfire) - 5/7/2026
+  - [Why the ColdSnap Pod Is Built the Way It Is, Evolving Material, Shape, and Engineering Intent](https://coldsnap.com/blogs/blog/coldsnap-pod-engineering) - 4/29/2026
+  - [What Guests Don't Say, Why Food Safety Perception Is Now a Guest Experience Problem](https://coldsnap.com/blogs/blog/food-safety-guest-trust-frozen-treats) - 4/22/2026
+  - [3 Quick Tips to Get More Out of Your ColdSnap Machine This Summer](https://coldsnap.com/blogs/blog/3-quick-tips-to-get-more-out-of-your-coldsnap-machine-this-summer) - 4/13/2026
+  - [ColdSnap Partners With Foodbuy to Deliver On-Demand Frozen Treats to Foodservice Operators](https://coldsnap.com/blogs/blog/coldsnap-partners-with-foodbuy-to-deliver-on-demand-frozen-treats-to-foodservice-operators) - 8/15/2025
+  - [Your Morning Just Got a Whole Lot Smoother: How to Make a Delicious & Healthy Smoothie with ColdSnap](https://coldsnap.com/blogs/blog/blend-it-like-its-hot-but-actually-cold-how-to-make-a-delicious-healthy-smoothie-with-coldsnap) - 6/4/2025
+  - [7 Reasons Every Golf Course Needs a ColdSnap Machine](https://coldsnap.com/blogs/blog/7-reasons-every-golf-course-needs-a-coldsnap-machine) - 5/29/2025
+  - [Empowering Students with Self-Serve Frozen Treats — No Hassle, All Joy](https://coldsnap.com/blogs/blog/empowering-students-with-self-serve-frozen-treats-no-hassle-all-joy) - 5/20/2025
+  - [6 Reasons Car Dealerships are Shifting Gears with ColdSnap](https://coldsnap.com/blogs/blog/6-reasons-car-dealerships-are-shifting-gears-with-coldsnap) - 4/24/2025
+  - [How Does ColdSnap Work? The Pod-to-Frozen-Treat System Explained](https://coldsnap.com/blogs/blog/high-quality-ice-cream-on-demand-from-a-can) - 4/24/2025
+
+## Pages
+
+- [Contact](https://coldsnap.com/pages/contact)
+- [Your Privacy Choices](https://coldsnap.com/pages/data-sharing-opt-out)
+- [Revolutionary Technology](https://coldsnap.com/pages/revolutionary-technology)
+- [Simple to Use](https://coldsnap.com/pages/simple-to-use)
+- [Our Story](https://coldsnap.com/pages/our-story)
+- [ColdSnap for Car Dealerships](https://coldsnap.com/pages/coldsnap-for-car-dealerships)
+- [Patents](https://coldsnap.com/pages/patents)
+- [ColdSnap for Colleges and Universities](https://coldsnap.com/pages/coldsnap-for-colleges-and-universities)
+- [ColdSnap for Golf and Sports Club](https://coldsnap.com/pages/coldsnap-for-golf-and-sports-club)
+- [ColdSnap for Hospitality and Wellness](https://coldsnap.com/pages/coldsnap-for-hospitality-and-wellness)
+- [ColdSnap for Offices](https://coldsnap.com/pages/coldsnap-for-offices)
+- [ColdSnap for Restaurants and Bars](https://coldsnap.com/pages/coldsnap-for-restaurants-and-bars)
+- [ColdSnap for Senior Living](https://coldsnap.com/pages/coldsnap-for-senior-living)
+- [ColdSnap for Sports and Entertainment](https://coldsnap.com/pages/coldsnap-for-sports-and-entertainment)
+- [FAQ](https://coldsnap.com/pages/faq)
+- [Nutritional Information](https://coldsnap.com/pages/nutritional-information)
+- [Customer Service](https://coldsnap.com/pages/customer-service)
+- [Appliance Limited 1-Year Warranty](https://coldsnap.com/pages/appliance-limited-1-year-warranty)
+- [Press](https://coldsnap.com/pages/press)
+- [ColdSnap Trial Program](https://coldsnap.com/pages/coldsnap-trial-program)
+- [How it Works](https://coldsnap.com/pages/how-it-works)
+- [For Business](https://coldsnap.com/pages/for-business)
+- [Coldsnap Factory](https://coldsnap.com/pages/our-production)
+- [Terms and Conditions of Purchase](https://coldsnap.com/pages/terms-and-conditions-of-purchase)
+- [Testimonials](https://coldsnap.com/pages/testimonials)
+- [Activate your 1 year Warranty](https://coldsnap.com/pages/activate-your-1-year-warranty)
+- [Marketing Materials](https://coldsnap.com/pages/marketing-materials)
+- [Refunds and Returns Policy](https://coldsnap.com/pages/refunds-and-returns-policy)
+- [ColdSnap B2B Affiliate Referral Program](https://coldsnap.com/pages/affiliate)
+- [Get in Touch](https://coldsnap.com/pages/get-in-touch)
+- [ColdSnap Co-Packing](https://coldsnap.com/pages/copack)
+- [ColdSnap](https://coldsnap.com/pages/coldsnap)
+- [ColdSnap for Micro Markets](https://coldsnap.com/pages/coldsnap-for-micro-markets)
+- [ColdSnap for Convenience Stores](https://coldsnap.com/pages/coldsnap-for-convenience-stores)
+- [Investors](https://coldsnap.com/pages/investors)
+- [troubleshooting](https://coldsnap.com/pages/troubleshooting)
+- [welcome](https://coldsnap.com/pages/welcome)
+- [Cookie Notice](https://coldsnap.com/pages/cookie-notice)
+
+## Optional
+
+- [Shopify Store Homepage](https://coldsnap.com): Main storefront
+- [All Collections](https://coldsnap.com/collections): Browse all product collections
+- [Blog](https://coldsnap.com/blogs): All blog posts

@@ -1,23 +1,184 @@
 aid: coldsnap
 name: ColdSnap
-description: 'ColdSnap is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'ColdSnap (formerly Sigma Phase, Corp.) is a Billerica, Massachusetts
+  hardware and frozen-confection company founded in October 2018 by Matt Fonte, whose
+  plug-and-play countertop appliance chills and churns a single serving of premium
+  ice cream, frozen yogurt, non-dairy dessert, frozen latte, protein shake, smoothie
+  or frozen cocktail from a shelf-stable recyclable pod in about two minutes, with
+  no refrigeration, plumbing or cleaning between servings. The company commercially
+  launched in April 2024 and sells machines, pods and accessories to restaurants and
+  bars, hotels, golf and sports clubs, colleges, senior living, car dealerships, offices,
+  convenience stores and micro markets. Its digital surface is a Shopify-hosted commerce
+  storefront at coldsnap.com serving a live, anonymously introspectable Storefront
+  GraphQL API, an anonymous Model Context Protocol server at /api/mcp, a Universal
+  Commerce Protocol (UCP) merchant profile and agentic-commerce endpoint, plus published
+  llms.txt and agents.md agent-instruction documents.'
 url: https://raw.githubusercontent.com/api-evangelist/coldsnap/refs/heads/main/apis.yml
+image: https://cdn.shopify.com/s/files/1/0973/7895/9650/files/ColdSnap-Logo-0923-FullColor_Horizontal.png?v=1763516060
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
 tags:
 - Company
-apis: []
+- Commerce
+- E-Commerce
+- Retail
+- Food and Beverage
+- Consumer Products
+- Hardware
+- Appliances
+- Foodservice
+- Agentic Commerce
+- Shopify
+- GraphQL
+- Model Context Protocol
+- Universal Commerce Protocol
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- name: ColdSnap Storefront GraphQL API
+  description: 'The live Shopify Storefront GraphQL API served from the ColdSnap primary
+    domain. Anonymously introspectable: a full introspection query returns 428 types,
+    35 root query fields and 41 mutations covering products, collections, variants,
+    blogs, articles, pages, menus, metaobjects, predictive search, localization, cart
+    creation and mutation, delivery and discount handling, and customer access tokens.
+    Versioned on Shopify''s dated quarterly API version train; 2025-10 through 2026-07
+    are reported supported.'
+  humanURL: https://shopify.dev/docs/api/storefront
+  baseURL: https://coldsnap.com/api/2026-07/graphql.json
+  tags:
+  - GraphQL
+  - Commerce
+  - Catalog
+  - Cart
+  - Storefront
+  properties:
+  - type: GraphQL
+    url: graphql/coldsnap-storefront.graphql
+  - type: APIReference
+    url: https://shopify.dev/docs/api/storefront
+  - type: Authentication
+    url: authentication/coldsnap-authentication.yml
+  - type: DataModel
+    url: data-model/coldsnap-data-model.yml
+- name: ColdSnap Storefront MCP Server
+  description: 'An anonymous, production Model Context Protocol server served from
+    the ColdSnap domain at /api/mcp. A live tools/list returns five tools with full
+    JSON Schema input contracts: search_catalog, get_product_details, get_cart, update_cart
+    and search_shop_policies_and_faqs. The server identifies as storefront-renderer
+    0.1.0 and negotiates MCP protocol version 2025-06-18, advertising tools, prompts,
+    resources and logging capabilities; prompts and resources are currently empty lists.
+    Tool responses conform to Universal Commerce Protocol shopping capabilities.'
+  humanURL: https://coldsnap.com/agents.md
+  baseURL: https://coldsnap.com/api/mcp
+  tags:
+  - MCP
+  - Agents
+  - Commerce
+  - Agentic Commerce
+  properties:
+  - type: MCPServer
+    url: mcp/coldsnap-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/coldsnap-tool-crosswalk.yml
+  - type: AgenticAccess
+    url: agentic-access/coldsnap-agentic-access.yml
+- name: ColdSnap Store JSON (Ajax) API
+  description: 'The unauthenticated read-only JSON surface Shopify serves from the
+    ColdSnap storefront and which the store''s own agents.md advertises to agents:
+    /products.json and /collections.json catalog listings, per-product /products/{handle}.json
+    documents, /collections/{handle}/products.json, /cart.js cart state, /search, and
+    /sitemap.xml including a dedicated agentic-discovery sitemap. No OpenAPI description
+    is published for this surface by either ColdSnap or the platform.'
+  humanURL: https://coldsnap.com/agents.md
+  baseURL: https://coldsnap.com/
+  tags:
+  - JSON
+  - Catalog
+  - Commerce
+  - Read Only
+  properties:
+  - type: Documentation
+    url: https://coldsnap.com/agents.md
+  - type: Sitemap
+    url: https://coldsnap.com/sitemap.xml
 common:
 - type: Website
+  url: https://coldsnap.com/
+- type: Documentation
+  url: https://coldsnap.com/agents.md
+- type: GettingStarted
+  url: https://coldsnap.com/agents.md
+- type: Support
+  url: https://coldsnap.com/pages/customer-service
+- type: HelpCenter
+  url: https://coldsnap.com/pages/faq
+- type: Contact
+  url: https://coldsnap.com/pages/get-in-touch
+- type: Blog
+  url: https://coldsnap.com/blogs/blog
+- type: BlogRSS
+  url: https://coldsnap.com/blogs/blog.atom
+- type: Pricing
+  url: https://coldsnap.com/collections/machine
+- type: Login
+  url: https://coldsnap.com/customer_authentication/login
+- type: TermsOfService
+  url: https://coldsnap.com/policies/terms-of-service
+- type: PrivacyPolicy
+  url: https://coldsnap.com/policies/privacy-policy
+- type: RefundPolicy
+  url: https://coldsnap.com/policies/refund-policy
+- type: Press
+  url: https://coldsnap.com/pages/press
+- type: Investors
+  url: https://coldsnap.com/pages/investors
+- type: Patents
+  url: https://coldsnap.com/pages/patents
+- type: SecondaryMarket
   url: https://forgeglobal.com/coldsnap_stock/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/coldsnapchill/
+- type: Instagram
+  url: https://www.instagram.com/coldsnap_chill/
+- type: YouTube
+  url: https://www.youtube.com/coldsnapchill
+- type: GraphQL
+  url: graphql/coldsnap-storefront.graphql
+- type: MCPServer
+  url: mcp/coldsnap-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/coldsnap-tool-crosswalk.yml
+- type: AgenticAccess
+  url: agentic-access/coldsnap-agentic-access.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/coldsnap-llms.txt
+- type: WellKnown
+  url: well-known/coldsnap-well-known.yml
+- type: Authentication
+  url: authentication/coldsnap-authentication.yml
+- type: OAuthScopes
+  url: scopes/coldsnap-scopes.yml
+- type: Conformance
+  url: conformance/coldsnap-conformance.yml
+- type: Conventions
+  url: conventions/coldsnap-conventions.yml
+- type: ErrorCatalog
+  url: errors/coldsnap-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/coldsnap-lifecycle.yml
+- type: Deprecation
+  url: https://shopify.dev/docs/api/usage/versioning
+- type: DataModel
+  url: data-model/coldsnap-data-model.yml
+- type: DomainSecurity
+  url: security/coldsnap-domain-security.yml

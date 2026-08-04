@@ -1,0 +1,107 @@
+generated: '2026-08-02'
+method: searched
+source: https://coldsnap.com/api/mcp
+status: published
+server:
+  name: coldsnap-storefront
+  transport: http
+  url: https://coldsnap.com/api/mcp
+  authentication: none
+  server_info:
+    name: storefront-renderer
+    version: 0.1.0
+  protocol_version: '2025-06-18'
+  capabilities:
+    tools:
+      listChanged: true
+    prompts:
+      listChanged: true
+    resources:
+      listChanged: true
+    logging: {}
+  discovery:
+  - source: https://coldsnap.com/robots.txt
+    note: robots.txt advertises the agent surface, the UCP discovery document and the
+      UCP/MCP endpoint
+  - source: https://coldsnap.com/agents.md
+    note: provider-served agent instruction document naming the UCP endpoints and the
+      typical agent flow
+  raw_tools_list: coldsnap-mcp-tools.json
+tools:
+- name: search_catalog
+  description: Search for products from the online store using natural language queries,
+    filter criteria, or both. At least one of query or filters must be provided. Results
+    are paginated via an opaque cursor.
+  required: []
+  input_properties:
+  - meta
+  - catalog
+  ucp_capability: dev.ucp.shopping.catalog.search
+- name: get_product_details
+  description: Look up a product by ID. Pass the options parameter to select a specific
+    variant for the product card; without options the first available variant is returned.
+  required:
+  - product_id
+  input_properties:
+  - product_id
+  - options
+  - country
+  - language
+  ucp_capability: dev.ucp.shopping.catalog.lookup
+- name: get_cart
+  description: Get the cart including items, shipping options, discount info and checkout
+    url for a given cart id.
+  required:
+  - cart_id
+  input_properties:
+  - cart_id
+  ucp_capability: dev.ucp.shopping.cart
+- name: update_cart
+  description: Perform updates to a cart in one consolidated call, including adding,
+    removing and updating line items, buyer information, shipping details, discount
+    codes, gift cards and notes. Shipping options become available after adding items
+    and a delivery address. When creating a new cart, only add_items is required.
+  required: []
+  input_properties:
+  - cart_id
+  - add_items
+  - update_items
+  - remove_line_ids
+  - buyer_identity
+  - delivery_addresses_to_add
+  - delivery_addresses_to_replace
+  - selected_delivery_options
+  - discount_codes
+  - gift_card_codes
+  - note
+  ucp_capability: dev.ucp.shopping.cart
+- name: search_shop_policies_and_faqs
+  description: Get facts about the store's policies, products or services (return policy,
+    shipping policy, phone number, hours of operation).
+  required:
+  - query
+  input_properties:
+  - query
+  - context
+prompts: []
+resources: []
+related_endpoints:
+- name: UCP agentic commerce endpoint
+  url: https://coldsnap.com/api/ucp/mcp
+  status: gated
+  observed_http_status: 422
+  observed_error: 'jsonrpc error -32001 "UCP discovery failed" / data.code invalid_profile_url
+    "Unable to fetch agent profile: Missing profile uri"'
+  note: tools/list requires the calling agent to supply a UCP agent profile URI; the
+    tool schemas on this endpoint could not be enumerated anonymously.
+- name: UCP merchant discovery profile
+  url: https://coldsnap.com/.well-known/ucp
+  status: 200
+  file: ../well-known/coldsnap-ucp.json
+x-evidence:
+  fetched: '2026-08-02'
+  method: POST
+  body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  headers: 'Accept: application/json, text/event-stream'
+  http_status: 200
+  tools_returned: 5

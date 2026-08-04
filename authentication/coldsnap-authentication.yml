@@ -1,0 +1,102 @@
+generated: '2026-08-02'
+method: searched
+source: https://coldsnap.com/.well-known/openid-configuration
+docs: https://coldsnap.com/agents.md
+note: >-
+  Derived from live probes rather than from an OpenAPI securitySchemes block - ColdSnap
+  publishes no OpenAPI. The auth surface was read from RFC 8414 / RFC 9728 / OIDC
+  discovery documents served on coldsnap.com and from the observed behaviour of each
+  API surface.
+summary:
+  types: [none, openIdConnect, oauth2, apiKey]
+  api_key_in: [header]
+  oauth2_flows: [authorizationCode]
+  anonymous_surfaces: 3
+schemes:
+- name: anonymous-storefront-mcp
+  type: none
+  applies_to: https://coldsnap.com/api/mcp
+  description: >-
+    The storefront MCP server accepts unauthenticated JSON-RPC. initialize, tools/list,
+    prompts/list and resources/list all returned 200 with no credential. Cart identity
+    is carried by an opaque cart_id rather than by a bearer token.
+  verified: true
+- name: anonymous-storefront-graphql
+  type: none
+  applies_to: https://coldsnap.com/api/2026-07/graphql.json
+  description: >-
+    Full GraphQL introspection and shop/product/collection queries succeeded with no
+    X-Shopify-Storefront-Access-Token header. Shopify's documented header for this API
+    is X-Shopify-Storefront-Access-Token (apiKey, in header); it was not required for
+    the anonymous reads observed here.
+  documented_header: X-Shopify-Storefront-Access-Token
+  verified: true
+- name: anonymous-json-ajax
+  type: none
+  applies_to: https://coldsnap.com/products.json
+  description: >-
+    /products.json, /collections.json, /products/{handle}.json, /collections/{handle}/products.json
+    and /cart.js all returned 200 anonymously.
+  verified: true
+- name: shopify-customer-accounts-oidc
+  type: openIdConnect
+  openIdConnectUrl: https://coldsnap.com/.well-known/openid-configuration
+  issuer: https://shopify.com/authentication/97378959650
+  applies_to: customer account APIs and the customer-account MCP surface
+  description: >-
+    Customer identity for the store is issued by Shopify's customer-accounts OpenID
+    Provider, discoverable at the ColdSnap origin. Authorization Code with PKCE (S256),
+    RS256 id_tokens, client_secret_basic token endpoint auth.
+  endpoints:
+    authorization: https://shopify.com/authentication/97378959650/oauth/authorize
+    token: https://shopify.com/authentication/97378959650/oauth/token
+    jwks: https://shopify.com/authentication/97378959650/.well-known/jwks.json
+    end_session: https://shopify.com/authentication/97378959650/logout
+  grant_types: [authorization_code, refresh_token, 'urn:ietf:params:oauth:grant-type:jwt-bearer']
+  code_challenge_methods: [S256]
+  id_token_signing_alg: [RS256]
+  scopes: [openid, email, 'customer-account-api:full', 'customer-account-mcp-api:full']
+  claims: [iss, sub, aud, exp, iat, nonce, sid, email, email_verified]
+  verified: true
+- name: oauth2-protected-resource
+  type: oauth2
+  applies_to: https://coldsnap.com
+  description: >-
+    RFC 9728 protected-resource metadata declares https://coldsnap.com as a protected
+    resource whose authorization server is the Shopify customer-accounts issuer, with
+    bearer tokens carried in the Authorization header.
+  resource: https://coldsnap.com
+  authorization_servers: [https://shopify.com/authentication/97378959650]
+  bearer_methods_supported: [header]
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://shopify.com/authentication/97378959650/oauth/authorize
+    tokenUrl: https://shopify.com/authentication/97378959650/oauth/token
+  verified: true
+- name: ucp-agent-profile
+  type: apiKey
+  in: header
+  applies_to: https://coldsnap.com/api/ucp/mcp
+  description: >-
+    The UCP agentic-commerce MCP endpoint does not accept anonymous tools/list; it
+    requires the calling agent to present a UCP agent profile URI for discovery.
+    Anonymous calls returned HTTP 422 with jsonrpc error -32001 "UCP discovery failed"
+    and data.code invalid_profile_url.
+  gated: true
+  verified: true
+observed_agent_differential:
+  note: >-
+    The customer login entry https://coldsnap.com/customer_authentication/login returns
+    HTTP 406 to non-browser clients (both a default curl UA and a spoofed Chrome UA)
+    while correctly issuing the OIDC authorize redirect in the redirect chain. Login
+    is human-gated; the machine surfaces are not.
+x-evidence:
+  fetched: '2026-08-02'
+  sources:
+  - {url: 'https://coldsnap.com/.well-known/openid-configuration', http_status: 200}
+  - {url: 'https://coldsnap.com/.well-known/oauth-authorization-server', http_status: 200}
+  - {url: 'https://coldsnap.com/.well-known/oauth-protected-resource', http_status: 200}
+  - {url: 'https://coldsnap.com/api/mcp', http_status: 200, method: POST}
+  - {url: 'https://coldsnap.com/api/2026-07/graphql.json', http_status: 200, method: POST}
+  - {url: 'https://coldsnap.com/api/ucp/mcp', http_status: 422, method: POST}
+  - {url: 'https://coldsnap.com/customer_authentication/login', http_status: 406}
