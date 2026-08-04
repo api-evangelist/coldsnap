@@ -1,0 +1,106 @@
+generated: '2026-08-04'
+method: probed
+source: >-
+  Observed live responses from https://coldsnap.com/api/2026-07/graphql.json,
+  https://coldsnap.com/api/mcp, https://coldsnap.com/api/ucp/mcp and the storefront HTTP surface
+format: none
+note: >-
+  ColdSnap publishes no OpenAPI and no RFC 9457 problem+json surface, so this catalog was
+  built from errors actually elicited against the live endpoints on 2026-08-04 rather than
+  derived from a spec. Two distinct envelopes are in play and an agent must handle both.
+envelopes:
+- id: graphql-errors
+  surface: https://coldsnap.com/api/2026-07/graphql.json
+  transport_status: 200
+  shape: '{errors: [{message, locations: [{line, column}], path: [], extensions: {code, typeName, fieldName}}]}'
+  warning: >-
+    The HTTP status is 200 even for a failed query. An agent that branches on status code
+    alone will treat a validation failure as a success.
+- id: jsonrpc-error
+  surface: https://coldsnap.com/api/mcp and https://coldsnap.com/api/ucp/mcp
+  transport_status: varies
+  shape: '{jsonrpc: "2.0", id, error: {code, message, data: {code, content, continue_url}}}'
+- id: html-storefront
+  surface: https://coldsnap.com/
+  shape: Shopify themed HTML error page
+  note: Non-API paths return an HTML 404 page, not a machine-readable body.
+problems:
+- id: graphql-undefined-field
+  envelope: graphql-errors
+  http_status: 200
+  code: undefinedField
+  title: Field does not exist on the requested type
+  observed_message: "Field 'nope' doesn't exist on type 'QueryRoot'"
+  remediation: >-
+    Re-introspect the schema for the pinned API version — field availability changes across
+    the dated version train. See graphql/coldsnap-storefront.graphql.
+  verified: true
+- id: ucp-invalid-profile-url
+  envelope: jsonrpc-error
+  http_status: 422
+  code: -32001
+  data_code: invalid_profile_url
+  title: UCP discovery failed
+  observed_message: 'Unable to fetch agent profile: Missing profile uri'
+  remediation: >-
+    The UCP agentic-commerce endpoint will not enumerate tools anonymously. Present a
+    resolvable UCP agent profile URI in the request; the error carries a continue_url
+    pointing back at the store.
+  surfaces: [https://coldsnap.com/api/ucp/mcp, https://coldsnapb2b.myshopify.com/api/ucp/mcp]
+  verified: true
+- id: not-acceptable-non-browser
+  envelope: html-storefront
+  http_status: 406
+  title: Not Acceptable
+  observed_on: https://coldsnap.com/customer_authentication/login
+  remediation: >-
+    The customer login and account-registration entries reject non-browser clients (both a
+    default curl user agent and a spoofed Chrome one) with 406 while still issuing the OIDC
+    authorize redirect in the chain. Human login is deliberately gated; do not treat this as
+    an outage. The machine surfaces (GraphQL, MCP, JSON) are not gated.
+  verified: true
+- id: not-found
+  envelope: html-storefront
+  http_status: 404
+  title: Not Found
+  observed_on:
+  - /.well-known/security.txt
+  - /.well-known/api-catalog
+  - /.well-known/agent-card.json
+  - /.well-known/agent.json
+  - /openapi.json
+  - /swagger.json
+  remediation: >-
+    Shopify serves a themed HTML page with a 404 status for unknown paths. Check the
+    content type before parsing — a 200 with an HTML body on a /.well-known/ path would be a
+    catch-all, and none was observed here.
+  verified: true
+- id: rate-limited
+  envelope: jsonrpc-error
+  http_status: 429
+  title: Too Many Requests
+  documented_in: https://coldsnap.com/agents.md
+  remediation: >-
+    "The MCP endpoint is rate-limited per IP. Back off on 429 responses." Documented by the
+    store; not elicited during probing.
+  verified: false
+- id: graphql-throttled
+  envelope: graphql-errors
+  http_status: 200
+  code: THROTTLED
+  title: Query cost exceeded the available bucket
+  remediation: >-
+    The Storefront API meters by query cost, returned on every response in
+    extensions.cost.throttleStatus. Reduce requested cost or wait for the bucket to restore.
+  documented_in: https://shopify.dev/docs/api/usage/rate-limits
+  verified: false
+gaps:
+- No RFC 9457 application/problem+json representation on any surface.
+- No published error-code reference specific to ColdSnap; the platform reference applies.
+- No error surface documented in /agents.md beyond the 429 back-off instruction.
+x-evidence:
+  fetched: '2026-08-04'
+  probes:
+  - {url: 'https://coldsnap.com/api/2026-07/graphql.json', body: '{"query":"{nope}"}', http_status: 200}
+  - {url: 'https://coldsnap.com/api/ucp/mcp', body: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}', http_status: 422}
+  - {url: 'https://coldsnap.com/customer_authentication/login', http_status: 406}

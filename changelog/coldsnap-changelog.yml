@@ -1,0 +1,85 @@
+generated: '2026-08-04'
+method: probed
+source: >-
+  publicApiVersions query against https://coldsnap.com/api/2026-07/graphql.json;
+  https://coldsnap.com/.well-known/ucp; response headers on https://coldsnap.com/api/mcp
+scope: platform
+note: >-
+  ColdSnap publishes no API changelog of its own. What it does serve is a live, queryable
+  version train — the store answers a publicApiVersions query naming exactly which dated
+  API versions it will accept — and RFC 8594 Deprecation/Sunset headers on its MCP
+  endpoint. That version train is the changelog a consumer of this API actually integrates
+  against, so it is captured here as observed on the store's own hosts, with the platform
+  changelog recorded as the narrative companion. Nothing below is a ColdSnap release note.
+scheme: dated-quarterly
+current_version: '2026-07'
+platform_changelog: https://shopify.dev/changelog
+versioning_policy: https://shopify.dev/docs/api/usage/versioning
+entries:
+- version: '2026-10'
+  date: '2026-10-01'
+  status: release-candidate
+  supported: false
+  surface: storefront-graphql
+  highlights:
+  - Announced by the store as a release candidate; not yet accepted for production calls.
+  breaking: unknown
+- version: '2026-07'
+  date: '2026-07-01'
+  status: current
+  supported: true
+  surface: storefront-graphql
+  highlights:
+  - The version ColdSnap's own baseURL pins (/api/2026-07/graphql.json).
+  - 428 types, 35 root query fields, 41 mutations as introspected on 2026-08-02.
+  - 51 schema members carry @deprecated, including the four *ByHandle root query fields.
+- version: '2026-04'
+  date: '2026-04-01'
+  status: supported
+  supported: true
+  surface: storefront-graphql
+- version: '2026-01'
+  date: '2026-01-01'
+  status: supported
+  supported: true
+  surface: storefront-graphql
+- version: '2025-10'
+  date: '2025-10-01'
+  status: supported
+  supported: true
+  surface: storefront-graphql
+  note: Oldest version the store still accepts; ages out on the quarterly train.
+- version: '2026-04-08'
+  date: '2026-04-08'
+  status: current
+  surface: ucp
+  highlights:
+  - Merchant profile at /.well-known/ucp declares this the current UCP protocol version.
+  - Adds dev.shopify.catalog extension over catalog.search and catalog.lookup.
+  - Shop Pay payment handler at version 2026-04-08.
+- version: '2026-01-23'
+  date: '2026-01-23'
+  status: supported
+  surface: ucp
+- version: unstable
+  date: '2026-06-24'
+  status: deprecated
+  surface: storefront-mcp
+  sunset: '2026-08-31'
+  highlights:
+  - >-
+    The MCP endpoint declares x-shopify-mcp-api-version: unstable and returns
+    `deprecation: @1782259200` (2026-06-24) plus `sunset: Mon, 31 Aug 2026 00:00:00 GMT`.
+    The only MCP version this store serves is already scheduled for removal.
+  breaking: true
+gaps:
+- ColdSnap publishes no product or API release notes on its own domain.
+- The store's blog (78 articles) is marketing and customer-story content, not a changelog.
+- No RSS or JSON feed of API changes is served from coldsnap.com.
+x-evidence:
+  fetched: '2026-08-04'
+  probes:
+  - {url: 'https://coldsnap.com/api/2026-07/graphql.json', query: publicApiVersions, http_status: 200}
+  - {url: 'https://coldsnap.com/.well-known/ucp', http_status: 200}
+  - {url: 'https://coldsnap.com/api/mcp', http_status: 200, headers: [deprecation, sunset]}
+  - {url: 'https://shopify.dev/changelog', http_status: 200}

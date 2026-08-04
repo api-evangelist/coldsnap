@@ -21,7 +21,7 @@ x-tier: profiled
 x-tier-reason: enrichment
 specificationVersion: '0.20'
 created: '2026-08-02'
-modified: '2026-08-02'
+modified: '2026-08-04'
 tags:
 - Company
 - Commerce
@@ -178,7 +178,18 @@ common:
   url: lifecycle/coldsnap-lifecycle.yml
 - type: Deprecation
   url: https://shopify.dev/docs/api/usage/versioning
+- type: StatusPage
+  url: https://www.shopifystatus.com/
+- type: ChangeLog
+  url: changelog/coldsnap-changelog.yml
+- type: APIReference
+  url: https://shopify.dev/docs/api/storefront
 - type: DataModel
   url: data-model/coldsnap-data-model.yml
 - type: DomainSecurity
   url: security/coldsnap-domain-security.yml
+x-enrichment:
+  date: '2026-08-04'
+  status: enriched
+  artifacts_added: 11
+  pass: local-v1

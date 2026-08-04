@@ -1,0 +1,40 @@
+generated: '2026-08-04'
+method: generated
+note: >-
+  ColdSnap publishes no OpenAPI, so these skills are grounded in the five tools returned by a
+  live tools/list against https://coldsnap.com/api/mcp and in root fields verified present in
+  the live-introspected Storefront GraphQL schema at graphql/coldsnap-storefront.graphql.
+  No operation, tool or field named in any skill was invented.
+skills:
+- file: coldsnap-agents.md
+  name: ColdSnap agent instructions (provider-published)
+  method: searched
+  source: https://coldsnap.com/agents.md
+  api: mcp/coldsnap-mcp.yml
+  description: >-
+    The store's own agent-instruction document, saved verbatim. Advertised from robots.txt
+    and from a dedicated /sitemap_agentic_discovery.xml. Carries the UCP endpoints, the
+    typical agent flow, the read-only browsing surface and the buyer-approval rule.
+  operations: [search_catalog, create_cart, create_checkout, update_checkout, complete_checkout]
+- file: coldsnap-find-and-price-a-product.md
+  name: Find and price a ColdSnap product
+  method: generated
+  api: mcp/coldsnap-mcp.yml
+  description: Search the catalog and resolve a specific purchasable variant with price and availability.
+  operations: [search_catalog, get_product_details]
+- file: coldsnap-build-a-cart.md
+  name: Build a ColdSnap cart and hand off to a human for checkout
+  method: generated
+  api: mcp/coldsnap-mcp.yml
+  description: >-
+    Create and mutate a cart with the consolidated update_cart tool, then stop at the
+    checkout boundary — the store requires contemporaneous human approval for payment.
+  operations: [update_cart, get_cart]
+- file: coldsnap-answer-store-questions.md
+  name: Answer questions about ColdSnap's policies, shipping and store facts
+  method: generated
+  api: mcp/coldsnap-mcp.yml
+  description: >-
+    Use the MCP policy tool for natural-language questions and fall back to the GraphQL Shop
+    policy fields and the page surface for authoritative text.
+  operations: [search_shop_policies_and_faqs]

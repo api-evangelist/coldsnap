@@ -1,0 +1,105 @@
+generated: '2026-08-04'
+method: probed
+source: >-
+  publicApiVersions query against https://coldsnap.com/api/2026-07/graphql.json,
+  response headers from https://coldsnap.com/api/mcp,
+  https://coldsnap.com/.well-known/ucp
+note: >-
+  ColdSnap runs on Shopify, so the lifecycle contract for its API surfaces is a platform
+  contract. Everything below is either served by coldsnap.com itself (the version list, the
+  Deprecation and Sunset headers) or is the platform policy page that governs it — each
+  entry is labelled with its scope so the distinction is not lost.
+versioning:
+- surface: storefront-graphql
+  scheme: dated-quarterly-uri-path
+  current: '2026-07'
+  supported: ['2025-10', '2026-01', '2026-04', '2026-07']
+  release_candidate: '2026-10'
+  unstable: unstable
+  docs: https://shopify.dev/docs/api/usage/versioning
+  scope: platform
+  evidence: >-
+    Live publicApiVersions query on 2026-08-04 returned 2025-10, 2026-01, 2026-04 and
+    2026-07 as supported: true; 2026-10 (Release candidate) and unstable as supported: false.
+    Each response echoes x-shopify-api-version.
+- surface: storefront-mcp
+  scheme: header-declared
+  current: unstable
+  header: x-shopify-mcp-api-version
+  scope: platform
+  evidence: 'Observed header on POST /api/mcp: x-shopify-mcp-api-version: unstable'
+- surface: ucp
+  scheme: dated
+  current: '2026-04-08'
+  supported: ['2026-04-08', '2026-01-23']
+  docs: https://ucp.dev/2026-04-08/specification/overview/
+  scope: store
+  evidence: supported_versions map served at https://coldsnap.com/.well-known/ucp
+- surface: mcp-protocol
+  scheme: dated
+  current: '2026-06-18'
+  negotiated: '2025-06-18'
+  scope: platform
+  evidence: initialize on /api/mcp negotiates MCP protocol version 2025-06-18
+deprecation:
+  policy_url: https://shopify.dev/docs/api/usage/versioning
+  sunset_header: true
+  deprecation_header: true
+  scope: platform
+  observed:
+  - surface: https://coldsnap.com/api/mcp
+    deprecation: '@1782259200'
+    deprecation_decoded: '2026-06-24T00:00:00Z'
+    sunset: Mon, 31 Aug 2026 00:00:00 GMT
+    standard: RFC 8594
+    note: >-
+      The store's own MCP endpoint is serving live RFC 8594 lifecycle headers — the
+      unstable MCP API version is already marked deprecated and is scheduled to sunset on
+      2026-08-31. An agent pinning this surface has weeks, not quarters.
+  policy_summary: >-
+    Shopify supports each dated Storefront API version for a minimum of 12 months from
+    release; versions age out quarterly and deprecated fields are announced in the platform
+    changelog before removal.
+deprecated_operations:
+  surface: storefront-graphql
+  source: graphql/coldsnap-storefront.graphql
+  root_query_fields:
+  - blogByHandle
+  - collectionByHandle
+  - pageByHandle
+  - productByHandle
+  mutations: []
+  total_deprecated_schema_members: 51
+  note: >-
+    Four root query fields carry @deprecated in the live 2026-07 schema — the *ByHandle
+    accessors, superseded by the handle argument on their singular fields. 51 schema members
+    in total are deprecated, including Cart.discountAllocations, Cart.estimatedCost,
+    CartLine.estimatedCost and Article.author.
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No SLA is published by ColdSnap for its storefront APIs, and none is offered on a
+    standard Shopify plan.
+status_page:
+  url: https://www.shopifystatus.com/
+  scope: platform
+  note: >-
+    ColdSnap operates no status page of its own. Availability of the storefront, GraphQL and
+    MCP surfaces served from coldsnap.com is reported on the Shopify platform status page,
+    which is the only operational transparency surface a consumer of this API has.
+  verified: 200
+support:
+  customer_service: https://coldsnap.com/pages/customer-service
+  faq: https://coldsnap.com/pages/faq
+  troubleshooting: https://coldsnap.com/pages/troubleshooting
+  contact: https://coldsnap.com/pages/get-in-touch
+  bots: bots@shopify.com
+  note: bots@shopify.com is given in robots.txt as the contact for automated clients.
+x-evidence:
+  fetched: '2026-08-04'
+  probes:
+  - {url: 'https://coldsnap.com/api/2026-07/graphql.json', query: publicApiVersions, http_status: 200}
+  - {url: 'https://coldsnap.com/api/mcp', http_status: 200, headers: [deprecation, sunset, x-shopify-mcp-api-version]}
+  - {url: 'https://www.shopifystatus.com/', http_status: 200}
+  - {url: 'https://shopify.dev/docs/api/usage/versioning', http_status: 200}

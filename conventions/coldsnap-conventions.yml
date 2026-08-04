@@ -1,0 +1,148 @@
+generated: '2026-08-04'
+method: searched
+source: >-
+  https://coldsnap.com/agents.md, https://coldsnap.com/robots.txt,
+  https://coldsnap.com/.well-known/ucp, live responses from
+  https://coldsnap.com/api/mcp and https://coldsnap.com/api/2026-07/graphql.json
+about: >-
+  Cross-cutting request/response semantics for the three ColdSnap surfaces — the Shopify
+  Storefront GraphQL API, the anonymous storefront MCP server, and the read-only Store JSON
+  (Ajax) endpoints. Derived from the store's own agent-instruction documents and from
+  observed live responses; there is no OpenAPI to derive from.
+authentication:
+  style: >-
+    None required for the three public surfaces. Customer identity is Shopify
+    customer-accounts OIDC (authorization code + PKCE S256). The UCP agentic-commerce
+    endpoint additionally requires the calling agent to present a UCP agent profile URI.
+  see: authentication/coldsnap-authentication.yml
+buyer_approval:
+  invariant: >-
+    Checkout, payment and order placement MUST NOT be completed by an agent without an
+    explicit, contemporaneous human approval step. Stated verbatim in both robots.txt
+    ("Checkouts are for humans") and /agents.md.
+  human_in_the_loop: required-for-payment
+  fallback: >-
+    Agents that cannot obtain contemporaneous approval are directed to install the Shop
+    skill at https://shop.app/SKILL.md and route the purchase through Shop Pay.
+  see: agentic-access/coldsnap-agentic-access.yml
+pagination:
+  graphql:
+    style: relay-cursor-connections
+    params: [first, last, after, before]
+    response_fields: [edges, node, cursor, pageInfo.hasNextPage, pageInfo.hasPreviousPage, pageInfo.startCursor, pageInfo.endCursor]
+    note: Every list field on the Storefront schema is a *Connection following the Relay spec.
+  mcp:
+    style: opaque-cursor
+    params: [pagination.cursor]
+    note: >-
+      search_catalog returns a limited first page and an opaque cursor; the tool description
+      instructs the agent to pass the cursor to page further.
+  json_ajax:
+    style: page-and-limit
+    params: [limit, page]
+    note: Shopify /products.json and /collections/{handle}/products.json conventions.
+query_cost:
+  surface: graphql
+  signal: extensions.cost
+  fields: [requestedQueryCost, actualQueryCost, throttleStatus]
+  note: >-
+    Observed on live responses — the Storefront API returns a cost extension block rather
+    than numeric rate-limit headers.
+rate_limiting:
+  signal: HTTP 429
+  policy: >-
+    /agents.md states the MCP endpoint is rate limited per IP and instructs agents to back
+    off on 429. No RateLimit-* headers (RFC 9331 draft) were observed on any surface.
+  headers_observed: []
+request_tracing:
+  header: x-request-id
+  surfaces: [graphql, mcp]
+  note: >-
+    Observed on every live response, e.g.
+    8456c302-df2d-44bb-93fb-5f0437d3dc68-1785857616 on /api/mcp. Quote this value in
+    support requests.
+versioning:
+  graphql:
+    scheme: dated-quarterly-uri-path
+    current: '2026-07'
+    supported: ['2025-10', '2026-01', '2026-04', '2026-07']
+    unsupported: ['2026-10', 'unstable']
+    negotiation: >-
+      Version is a path segment (/api/{version}/graphql.json); the live schema answers a
+      publicApiVersions query listing supported versions, and each response echoes
+      x-shopify-api-version.
+  mcp:
+    scheme: header-declared
+    current: unstable
+    header: x-shopify-mcp-api-version
+  ucp:
+    scheme: dated
+    current: '2026-04-08'
+    supported: ['2026-04-08', '2026-01-23']
+    negotiation: supported_versions map at /.well-known/ucp
+  see: lifecycle/coldsnap-lifecycle.yml
+error_envelope:
+  graphql:
+    transport_status: 200
+    shape: 'errors[]: {message, locations[], path[], extensions:{code, typeName, fieldName}}'
+    note: >-
+      Field and validation errors are returned with HTTP 200 and a top-level errors array —
+      an agent must inspect the body, not the status code.
+  mcp:
+    shape: 'JSON-RPC 2.0 error: {code, message, data:{code, content, continue_url}}'
+    note: The UCP endpoint returned -32001 / invalid_profile_url on an anonymous tools/list.
+  see: errors/coldsnap-problem-types.yml
+context_parameters:
+- name: country
+  surface: mcp
+  purpose: Localized pricing and availability on get_product_details.
+- name: language
+  surface: mcp
+  purpose: Localized content on get_product_details.
+- name: context.address_country
+  surface: ucp-mcp
+  purpose: Accurate pricing and availability by destination (per /agents.md).
+- name: context.currency
+  surface: ucp-mcp
+  purpose: Currency for pricing (per /agents.md).
+metadata:
+  mechanism: metafields
+  note: >-
+    Product, ProductVariant, Collection, Cart, Customer, Order, Article, Blog, Page,
+    Location and Shop all implement HasMetafields, exposing metafield(namespace,key) and
+    metafields(identifiers). Carts additionally support cartMetafieldsSet /
+    cartMetafieldDelete.
+field_selection:
+  mechanism: graphql-field-selection
+  note: >-
+    Sparse fieldsets are native to GraphQL; there is no expand/fields query parameter on
+    the JSON surface, which returns fixed documents.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    No idempotency-key contract is documented or observed on any ColdSnap surface. Cart
+    mutations are stateful and non-idempotent — a repeated update_cart add_items call adds
+    the line again. Agents must carry the returned cart_id rather than retry blind. This is
+    a genuine gap in the store's agent contract, not an omission in this record.
+read_only_surface:
+- GET /products.json
+- GET /products/{handle}.json
+- GET /collections.json
+- GET /collections/{handle}/products.json
+- GET /cart.js
+- GET /search?q={query}&type=product
+- GET /sitemap.xml
+- GET /sitemap_agentic_discovery.xml
+cross_links:
+  authentication: authentication/coldsnap-authentication.yml
+  scopes: scopes/coldsnap-scopes.yml
+  errors: errors/coldsnap-problem-types.yml
+  lifecycle: lifecycle/coldsnap-lifecycle.yml
+  data_model: data-model/coldsnap-data-model.yml
+  crosswalk: mcp/coldsnap-tool-crosswalk.yml
+x-evidence:
+  fetched: '2026-08-04'
+  observed:
+  - {url: 'https://coldsnap.com/api/mcp', http_status: 200, headers: [x-request-id, x-shopify-mcp-api-version, deprecation, sunset]}
+  - {url: 'https://coldsnap.com/api/2026-07/graphql.json', http_status: 200, headers: [x-request-id, x-shopify-api-version]}

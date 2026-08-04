@@ -1,0 +1,116 @@
+generated: '2026-08-04'
+method: probed
+source: >-
+  Live probes of https://coldsnap.com — /.well-known/ucp, /.well-known/openid-configuration,
+  /.well-known/oauth-authorization-server, /.well-known/oauth-protected-resource,
+  /api/mcp, /api/ucp/mcp, /api/2026-07/graphql.json, /llms.txt, /agents.md, /robots.txt
+about: >-
+  ColdSnap publishes no OpenAPI. Every assertion below was established by fetching the
+  named document or calling the named endpoint on 2026-08-04 and reading what came back;
+  nothing here is inferred from a vendor claim.
+standards:
+- id: graphql
+  conforms: true
+  evidence: >-
+    Live Shopify Storefront GraphQL endpoint at /api/2026-07/graphql.json answers full
+    anonymous introspection (428 types, 35 root query fields, 41 mutations); SDL saved to
+    graphql/coldsnap-storefront.graphql
+- id: graphql-cursor-connections
+  conforms: true
+  evidence: >-
+    Relay cursor-connection specification — every list field is a *Connection with
+    edges/node/pageInfo (ProductConnection, CollectionConnection, ArticleConnection,
+    BaseCartLineConnection, …)
+- id: mcp
+  conforms: true
+  evidence: >-
+    POST /api/mcp returns a JSON-RPC 2.0 tools/list result with five tools carrying full
+    JSON Schema inputSchema; server negotiates MCP protocol version 2025-06-18 and
+    advertises tools/prompts/resources/logging capabilities
+- id: jsonrpc-2.0
+  conforms: true
+  evidence: >-
+    Both MCP endpoints answer the JSON-RPC 2.0 envelope; the UCP endpoint returned a
+    conformant error object (code -32001, message, data) on an anonymous tools/list
+- id: json-schema
+  conforms: true
+  evidence: >-
+    Each MCP tool publishes an inputSchema draft JSON Schema; raw manifest saved to
+    mcp/coldsnap-mcp-tools.json
+- id: ucp
+  conforms: true
+  evidence: >-
+    Universal Commerce Protocol merchant profile at /.well-known/ucp declares versions
+    2026-04-08 and 2026-01-23, the dev.ucp.shopping service over mcp and embedded
+    transports, and checkout / cart / fulfillment / discount / order / catalog.search /
+    catalog.lookup capabilities
+- id: oauth2
+  conforms: true
+  evidence: >-
+    RFC 8414 authorization-server metadata published at /.well-known/oauth-authorization-server;
+    authorization_code + refresh_token + jwt-bearer grants
+- id: rfc9728-protected-resource
+  conforms: true
+  evidence: >-
+    RFC 9728 OAuth 2.0 Protected Resource Metadata served at /.well-known/oauth-protected-resource,
+    naming https://coldsnap.com as the resource and the Shopify customer-accounts issuer as
+    its authorization server, bearer tokens in the Authorization header
+- id: oidc
+  conforms: true
+  evidence: >-
+    OpenID Connect Discovery 1.0 document at /.well-known/openid-configuration; issuer
+    https://shopify.com/authentication/97378959650, RS256 id_tokens
+- id: pkce
+  conforms: true
+  evidence: code_challenge_methods_supported includes S256
+- id: rfc8594-sunset
+  conforms: true
+  evidence: >-
+    POST /api/mcp returns RFC 8594 lifecycle headers — `deprecation: @1782259200`
+    (2026-06-24) and `sunset: Mon, 31 Aug 2026 00:00:00 GMT` — alongside
+    `x-shopify-mcp-api-version: unstable`
+- id: llms-txt
+  conforms: true
+  evidence: /llms.txt served as text/markdown with collections, products, blogs and pages link lists
+- id: agents-md
+  conforms: true
+  evidence: >-
+    /agents.md served and advertised from both robots.txt and a dedicated
+    /sitemap_agentic_discovery.xml
+- id: request-id-correlation
+  conforms: true
+  evidence: >-
+    Both the MCP and GraphQL surfaces return an `x-request-id` correlation header on every
+    response
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    No application/problem+json response was observed on any surface; errors are GraphQL
+    `errors[]` objects or JSON-RPC error objects
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on both coldsnap.com and coldsnapb2b.myshopify.com
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returns 404
+- id: a2a
+  conforms: false
+  evidence: >-
+    /.well-known/agent-card.json and /.well-known/agent.json both return 404 on
+    coldsnap.com and on coldsnapb2b.myshopify.com; no agent card is published
+- id: openapi
+  conforms: false
+  evidence: >-
+    /openapi.json, /openapi.yaml, /swagger.json, /v1/openapi.json, /api-docs and /redoc all
+    return 404 (or the Shopify HTML shell) on every host; no OpenAPI description exists for
+    any ColdSnap surface
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    ColdSnap exposes no public event, streaming or webhook surface — the storefront,
+    MCP and JSON APIs are request/response only
+x-evidence:
+  fetched: '2026-08-04'
+  hosts:
+  - coldsnap.com
+  - coldsnapb2b.myshopify.com

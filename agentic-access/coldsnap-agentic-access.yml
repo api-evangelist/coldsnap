@@ -1,0 +1,295 @@
+generated: '2026-08-04'
+method: generated
+source: >-
+  mcp/coldsnap-mcp.yml (live tools/list, 5 tools), graphql/coldsnap-storefront.graphql
+  (live introspection, 41 mutations), https://coldsnap.com/agents.md,
+  https://coldsnap.com/robots.txt
+description: >-
+  Recommended x-agentic-access execution contracts for the ColdSnap agent surface. ColdSnap
+  publishes no OpenAPI, so operations are the live MCP tools and the GraphQL mutation
+  families they project over, not REST operationIds. A governance starting point — review
+  and bind audience per deployment. See research/curity/agentic-governance/.
+provider_stated_policy:
+  source: https://coldsnap.com/robots.txt and https://coldsnap.com/agents.md
+  rule: >-
+    "Checkouts are for humans. Do NOT complete checkout, payment, or order placement
+    automatically — no scripted form fills, browser automation, or end-to-end agent flows
+    that finalize payment without an explicit, contemporaneous human approval step."
+  note: >-
+    This is the rare case where the provider publishes its own agent escalation rule. The
+    human-in-the-loop classification on the payment-adjacent operations below is the
+    provider's stated policy, not our heuristic.
+summary:
+  operations: 16
+  by_action_class:
+    connected: 6
+    acting: 10
+  by_consequence:
+    read: 6
+    write: 8
+    physical: 2
+  human_in_the_loop_required: 2
+  surfaces: [mcp, graphql, json-ajax]
+operations:
+- surface: mcp
+  endpoint: https://coldsnap.com/api/mcp
+  tool: search_catalog
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- surface: mcp
+  endpoint: https://coldsnap.com/api/mcp
+  tool: get_product_details
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- surface: mcp
+  endpoint: https://coldsnap.com/api/mcp
+  tool: get_cart
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: required
+    audience: null
+    token:
+      max-ttl: 3600
+    audit: none
+    note: >-
+      The opaque cart_id is the bearer of cart identity on an otherwise anonymous surface.
+      Treat it as a secret — anyone holding it can read and mutate that cart.
+- surface: mcp
+  endpoint: https://coldsnap.com/api/mcp
+  tool: search_shop_policies_and_faqs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- surface: mcp
+  endpoint: https://coldsnap.com/api/mcp
+  tool: update_cart
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [high-value, buyer-identity-change, delivery-address-change]
+    audit: required
+    note: >-
+      A single consolidated tool that fans out across eleven GraphQL cart mutations,
+      including buyer_identity and delivery addresses — personal data enters the cart here.
+      No idempotency key is offered, so a naive retry duplicates line items.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-create-and-lines
+  fields: [cartCreate, cartLinesAdd, cartLinesUpdate, cartLinesRemove]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [high-value]
+    audit: required
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-buyer-identity
+  fields: [cartBuyerIdentityUpdate, cartBillingAddressUpdate, cartDeliveryAddressesAdd, cartDeliveryAddressesReplace, cartDeliveryAddressesUpdate, cartDeliveryAddressesRemove]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [pii-write]
+    audit: required
+    note: Writes buyer name, email, phone and postal addresses onto the cart.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-personal-data-erasure
+  fields: [cartRemovePersonalData]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [destructive]
+    audit: required
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-discounts-and-gift-cards
+  fields: [cartDiscountCodesUpdate, cartGiftCardCodesAdd, cartGiftCardCodesUpdate, cartGiftCardCodesRemove]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [value-bearing-instrument]
+    audit: required
+    note: Gift-card codes are bearer instruments; do not log them.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-metadata
+  fields: [cartAttributesUpdate, cartNoteUpdate, cartMetafieldsSet, cartMetafieldDelete, cartClone]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    audit: required
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: cart-payment
+  fields: [cartPaymentUpdate]
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 300
+      exchange: required
+    escalation:
+      human-in-the-loop: required
+      triggers: [payment]
+    audit: required
+    note: >-
+      Provider-stated policy. Payment instrument attachment must not happen without
+      contemporaneous buyer approval.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: checkout-completion
+  fields: [cartPrepareForCompletion, cartSubmitForCompletion, shopPayPaymentRequestSessionCreate, shopPayPaymentRequestSessionSubmit]
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 300
+      exchange: required
+    escalation:
+      human-in-the-loop: required
+      triggers: [payment, order-placement]
+    audit: required
+    note: >-
+      Provider-stated policy, verbatim in robots.txt and /agents.md. Agents without
+      contemporaneous approval are directed to route through Shop Pay via
+      https://shop.app/SKILL.md instead. Deliberately absent from the anonymous MCP tool set.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: customer-identity
+  fields: [customerCreate, customerActivate, customerActivateByUrl, customerRecover, customerReset, customerResetByUrl, customerUpdate]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: required
+      triggers: [account-creation, credential-change]
+    audit: required
+    note: >-
+      Account creation and password reset. Not exposed by any MCP tool; requires a customer
+      access token issued through the Shopify customer-accounts OIDC flow.
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: customer-access-tokens
+  fields: [customerAccessTokenCreate, customerAccessTokenCreateWithMultipass, customerAccessTokenRenew, customerAccessTokenDelete]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 900
+      exchange: required
+    escalation:
+      human-in-the-loop: conditional
+      triggers: [credential-issuance]
+    audit: required
+- surface: graphql
+  endpoint: https://coldsnap.com/api/2026-07/graphql.json
+  operation_family: customer-addresses
+  fields: [customerAddressCreate, customerAddressUpdate, customerAddressDelete, customerDefaultAddressUpdate]
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    purpose: required
+    token:
+      max-ttl: 900
+    audit: required
+- surface: json-ajax
+  endpoint: https://coldsnap.com/
+  operation_family: read-only-catalog
+  paths:
+  - /products.json
+  - '/products/{handle}.json'
+  - /collections.json
+  - '/collections/{handle}/products.json'
+  - /cart.js
+  - /search
+  - /sitemap.xml
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+    note: Unauthenticated, advertised to agents in /agents.md.
+notes:
+- >-
+  Every field named above was verified present in the live introspected schema at
+  graphql/coldsnap-storefront.graphql; every tool was returned by a live tools/list.
+- >-
+  audience is left null throughout — bind it per deployment.
+- >-
+  The UCP endpoint at /api/ucp/mcp could not be enumerated anonymously (422 /
+  invalid_profile_url), so its tool-level contracts are not classified here.
+x-evidence:
+  generated_from:
+  - mcp/coldsnap-mcp.yml
+  - graphql/coldsnap-storefront.graphql
+  - https://coldsnap.com/agents.md
+  - https://coldsnap.com/robots.txt
+  date: '2026-08-04'
