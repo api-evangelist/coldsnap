@@ -21,25 +21,22 @@ server:
     logging: {}
   discovery:
   - source: https://coldsnap.com/robots.txt
-    note: robots.txt advertises the agent surface, the UCP discovery document and the
-      UCP/MCP endpoint
+    note: robots.txt advertises the agent surface, the UCP discovery document and the UCP/MCP endpoint
   - source: https://coldsnap.com/agents.md
-    note: provider-served agent instruction document naming the UCP endpoints and the
-      typical agent flow
+    note: provider-served agent instruction document naming the UCP endpoints and the typical agent flow
   raw_tools_list: coldsnap-mcp-tools.json
 tools:
 - name: search_catalog
-  description: Search for products from the online store using natural language queries,
-    filter criteria, or both. At least one of query or filters must be provided. Results
-    are paginated via an opaque cursor.
+  description: Search for products from the online store using natural language queries, filter criteria,
+    or both. At least one of query or filters must be provided. Results are paginated via an opaque cursor.
   required: []
   input_properties:
   - meta
   - catalog
   ucp_capability: dev.ucp.shopping.catalog.search
 - name: get_product_details
-  description: Look up a product by ID. Pass the options parameter to select a specific
-    variant for the product card; without options the first available variant is returned.
+  description: Look up a product by ID. Pass the options parameter to select a specific variant for the
+    product card; without options the first available variant is returned.
   required:
   - product_id
   input_properties:
@@ -49,18 +46,18 @@ tools:
   - language
   ucp_capability: dev.ucp.shopping.catalog.lookup
 - name: get_cart
-  description: Get the cart including items, shipping options, discount info and checkout
-    url for a given cart id.
+  description: Get the cart including items, shipping options, discount info and checkout url for a given
+    cart id.
   required:
   - cart_id
   input_properties:
   - cart_id
   ucp_capability: dev.ucp.shopping.cart
 - name: update_cart
-  description: Perform updates to a cart in one consolidated call, including adding,
-    removing and updating line items, buyer information, shipping details, discount
-    codes, gift cards and notes. Shipping options become available after adding items
-    and a delivery address. When creating a new cart, only add_items is required.
+  description: Perform updates to a cart in one consolidated call, including adding, removing and updating
+    line items, buyer information, shipping details, discount codes, gift cards and notes. Shipping options
+    become available after adding items and a delivery address. When creating a new cart, only add_items
+    is required.
   required: []
   input_properties:
   - cart_id
@@ -76,8 +73,8 @@ tools:
   - note
   ucp_capability: dev.ucp.shopping.cart
 - name: search_shop_policies_and_faqs
-  description: Get facts about the store's policies, products or services (return policy,
-    shipping policy, phone number, hours of operation).
+  description: Get facts about the store's policies, products or services (return policy, shipping policy,
+    phone number, hours of operation).
   required:
   - query
   input_properties:
@@ -90,10 +87,10 @@ related_endpoints:
   url: https://coldsnap.com/api/ucp/mcp
   status: gated
   observed_http_status: 422
-  observed_error: 'jsonrpc error -32001 "UCP discovery failed" / data.code invalid_profile_url
-    "Unable to fetch agent profile: Missing profile uri"'
-  note: tools/list requires the calling agent to supply a UCP agent profile URI; the
-    tool schemas on this endpoint could not be enumerated anonymously.
+  observed_error: 'jsonrpc error -32001 "UCP discovery failed" / data.code invalid_profile_url "Unable
+    to fetch agent profile: Missing profile uri"'
+  note: tools/list requires the calling agent to supply a UCP agent profile URI; the tool schemas on this
+    endpoint could not be enumerated anonymously.
 - name: UCP merchant discovery profile
   url: https://coldsnap.com/.well-known/ucp
   status: 200
@@ -105,3 +102,11 @@ x-evidence:
   headers: 'Accept: application/json, text/event-stream'
   http_status: 200
   tools_returned: 5
+deployment:
+  mode: remote
+  endpoint: https://coldsnap.com/api/mcp
+  verified: probed
+  probe: live
+  tools: 5
+  checked: '2026-08-12'
+  source: catalog MCP census
