@@ -14,6 +14,17 @@ description: 'ColdSnap (formerly Sigma Phase, Corp.) is a Billerica, Massachuset
   Commerce Protocol (UCP) merchant profile and agentic-commerce endpoint, plus published
   llms.txt and agents.md agent-instruction documents.'
 url: https://raw.githubusercontent.com/api-evangelist/coldsnap/refs/heads/main/apis.yml
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: medium
+  source:
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cdn.shopify.com/s/files/1/0973/7895/9650/files/ColdSnap-Logo-0923-FullColor_Horizontal.png?v=1763516060
 x-type: company
 x-source: harvest:secondary-market
