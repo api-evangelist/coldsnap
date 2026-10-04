@@ -108,6 +108,9 @@ apis:
     url: authentication/coldsnap-authentication.yml
   - type: DataModel
     url: data-model/coldsnap-data-model.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-graphql
 - name: ColdSnap Storefront MCP Server
   description: 'An anonymous, production Model Context Protocol server served from
     the ColdSnap domain at /api/mcp. A live tools/list returns five tools with full
@@ -130,6 +133,9 @@ apis:
     url: mcp/coldsnap-tool-crosswalk.yml
   - type: AgenticAccess
     url: agentic-access/coldsnap-agentic-access.yml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-mcp
 - name: ColdSnap Store JSON (Ajax) API
   description: 'The unauthenticated read-only JSON surface Shopify serves from the
     ColdSnap storefront and which the store''s own agents.md advertises to agents:
@@ -138,7 +144,6 @@ apis:
     /sitemap.xml including a dedicated agentic-discovery sitemap. No OpenAPI description
     is published for this surface by either ColdSnap or the platform.'
   humanURL: https://coldsnap.com/agents.md
-  baseURL: https://coldsnap.com/
   tags:
   - JSON
   - Catalog
@@ -149,6 +154,9 @@ apis:
     url: https://coldsnap.com/agents.md
   - type: Sitemap
     url: https://coldsnap.com/sitemap.xml
+  x-surface: platform-generated
+  x-platform: shopify
+  x-platform-surface: storefront-json
 common:
 - type: Website
   url: https://coldsnap.com/
